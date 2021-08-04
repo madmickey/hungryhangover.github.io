@@ -1,0 +1,124 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+<body>
+<form id="searchForm">
+  <div class="form-group">
+	<input type="text" class="form-control" placeholder="where" id="where"></input>
+	<input type="text" class="form-control" placeholder="number" id="adultsCount">2</input>
+	<input type="date" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" id="from">
+	<input type="date" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" id="to">
+	<div class="input-group" id="searchWhich">
+		<div class="input-group-text">
+			<input type="checkbox"><span class="input-group-text" >stayz</span></input>
+		</div>
+	</div>
+  </div>
+   <button type="button" class="btn btn-primary" id="search">Search</button>
+</form>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+<script>
+
+	
+var searchList = ["stayz","airbnb"];
+
+var searchMap = 
+{
+    "stayz" : { url: "https://www.stayz.com.au/", keywords: "search/keywords:", 
+					extra : "",
+					from: "/arrival:", fromFormat: "YYYY-MM-DD",
+					to: "/departure:",toFormat: "YYYY-MM-DD", 
+					suffix:"?",adultsCount:"adultsCount=" ,postAmble:"/minNightlyPrice/0?filterByTotalPrice=true&petIncluded=false&ssr=true"},
+    "airbnb" : { url: "https://www.airbnb.com.au/", keywords: "s/", 
+					extra : "/homes?tab_id=home_tab&refinement_paths%5B%5D=%2Fhomes&flexible_trip_dates%5B%5D=august&flexible_trip_dates%5B%5D=july&flexible_trip_lengths%5B%5D=weekend_trip&date_picker_type=calendar",
+					from: "&checkin=", fromFormat: "YYYY-MM-DD",
+					to: "&checkout=",toFormat: "YYYY-MM-DD", 
+					suffix:"",adultsCount:"&adults=" ,postAmble:"&source=structured_search_input_header&search_type=filter_change"},
+    "key3" : { data: "data3", extra: "none" },
+    "key4" : { data: "data4", extra: "none" }, 
+};
+
+//https://www.airbnb.com.au/s/indiana/homes?tab_id=home_tab&refinement_paths%5B%5D=%2Fhomes&flexible_trip_dates%5B%5D=august&flexible_trip_dates%5B%5D=july&flexible_trip_lengths%5B%5D=weekend_trip&date_picker_type=calendar&checkin=2021-08-11&checkout=2021-08-19&adults=2&source=structured_search_input_header&search_type=filter_change
+
+
+$("#search").click( function()
+{
+	var urlList=[];
+	var where=$("#where").val();
+	var from=new Date($("#from").val());
+	var to=new Date($("#to").val());
+	var adultsCount=$("#adultsCount").val();
+	
+
+	$(searchMap["stayz"]).each(function(index){
+		var myFrom=moment(from).format(this.fromFormat);     
+		var myTo=moment(to).format(this.toFormat);     
+		var url=this.url+this.keywords+where+this.extra
+			this.from+myFrom+
+			this.to+myTo+
+			this.suffix+
+			this.adultsCount+adultsCount+
+			this.postAmble;
+	  
+	  urlList.push(url);
+	//  $(this).("span").each(function(){console.log($(this);}
+	});
+	
+	$(searchMap["airbnb"]).each(function(index){
+		var myFrom=moment(from).format(this.fromFormat);     
+		var myTo=moment(to).format(this.toFormat);     
+		var url=this.url+this.keywords+where+this.extra
+			this.from+myFrom+
+			this.to+myTo+
+			this.suffix+
+			this.adultsCount+adultsCount+
+			this.postAmble;
+	  
+	  
+	  urlList.push(url);
+	//  $(this).("span").each(function(){console.log($(this);}
+	});
+	
+
+
+	if (urlList)
+	{
+		console.log(url);
+		$.each( urlList, function( index, item ) {
+			window.open( item, "_blank" );
+		});
+	}
+	else
+	{
+	console.log("none");
+	}
+});
+
+ $( document ).ready(function() {
+        console.log( "document loaded" );
+		
+		
+		$("#where").val('Stockholm');
+		$("#from");
+		$("#to");
+
+		
+		document.getElementById("search").click();
+ });
+
+
+</script>
+
+</body>
+</html>
